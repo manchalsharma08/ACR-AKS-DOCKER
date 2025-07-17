@@ -1,23 +1,28 @@
 trigger: none
+
 pool: default
+
+variables:
+  acrName: 'myacr5696'
+  repositoryName: 'myacr5696'
+
 stages:
 - stage: buildAndPush
   jobs:
   - job: BuildJob
     steps:
-     - task: DockerInstaller@0
-       inputs:
-         dockerVersion: '17.09.0-ce'
-     - task: AzureCLI@2
-       inputs:
-         azureSubscription: 'AbhimanSC'
-         scriptType: 'ps'
-         scriptLocation: 'inlineScript'
-         inlineScript: 'az acr update --name myacr5696 --admin-enabled true'
-     - task: Docker@2
-       inputs:
-         containerRegistry: 'abhiacrsc'
-         repository: 'myacr5696'
-         command: 'buildAndPush'
-         Dockerfile: '**/Dockerfile'
-         
+    - task: DockerInstaller@0
+      inputs:
+        dockerVersion: '17.09.0-ce'
+    
+    # Remove the AzureCLI task that enables admin as we're using service principal
+    
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'myACRServicePrincipal'  # Using your service connection
+        repository: $(repositoryName)
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+          latest
+          $(Build.BuildId)
