@@ -1,10 +1,10 @@
 trigger: none
-
 pool: default
 
 variables:
   acrName: 'myacr5696'
-  repositoryName: 'myacr5696'
+  imageName: 'myapp-image'
+  dockerfilePath: '**/Dockerfile'
 
 stages:
 - stage: buildAndPush
@@ -13,16 +13,16 @@ stages:
     steps:
     - task: DockerInstaller@0
       inputs:
-        dockerVersion: '17.09.0-ce'
+        dockerVersion: '20.10.0'
     
-    # Remove the AzureCLI task that enables admin as we're using service principal
-    
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'ACRServiceconnectionnight'
-        repository: '$(repositoryName)'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: |
-          latest
-          $(Build.BuildId)
+    - powershell: |
+        # Build the image
+        docker build -t $(acrName).azurecr.io/$(imageName) -f $(dockerfilePath) .
+        
+        # Login to ACR (alternative method)
+        $creds = az acr credential show -n $(acrName) --query passwords[0].value -o tsv
+        docker login $(acrName).azurecr.io -u $(acrName) -p $creds
+        
+        # Push the image
+        docker push $(acrName).azurecr.io/$(imageName):latest
+      displayName: 'Build and Push with PowerShell'
