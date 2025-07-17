@@ -19,8 +19,8 @@ stages:
     
     - task: Docker@2
       inputs:
-        containerRegistry: 'myACRServicePrincipal'  # Using your service connection
-        repository: $(repositoryName)
+        containerRegistry: 'ACRServiceconnectionnight'
+        repository: '$(repositoryName)'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: |
