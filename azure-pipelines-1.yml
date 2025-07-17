@@ -1,0 +1,17 @@
+trigger: none
+pool: default
+stages:
+- stage: buildAndPush
+  jobs:
+  - job: BuildJob
+    steps:
+     - task: DockerInstaller@0
+       inputs:
+         dockerVersion: '17.09.0-ce'
+     - task: Docker@2
+       inputs:
+         containerRegistry: 'abhiacrsc'
+         repository: 'myacr5696'
+         command: 'buildAndPush'
+         Dockerfile: '**/Dockerfile'
+         
