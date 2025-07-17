@@ -8,6 +8,12 @@ stages:
      - task: DockerInstaller@0
        inputs:
          dockerVersion: '17.09.0-ce'
+     - task: AzureCLI@2
+       inputs:
+         azureSubscription: 'AbhimanSC'
+         scriptType: 'ps'
+         scriptLocation: 'inlineScript'
+         inlineScript: 'az acr update --name myacr5696 --admin-enabled true'
      - task: Docker@2
        inputs:
          containerRegistry: 'abhiacrsc'
