@@ -1,4 +1,9 @@
 trigger: none
 pool: default
 steps:
- 
+ - task: AzureCLI@2
+   inputs:
+     azureSubscription: 'myACRServicePrincipal'
+     scriptType: 'bash'
+     scriptLocation: 'inlineScript'
+     inlineScript: 'az acr build -t sample/html-calculator:786 -r myacr5696 --no-logs .'
