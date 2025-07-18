@@ -6,4 +6,4 @@ steps:
      containerRegistry: 'adoacrdemo'
      repository: 'myacr5696'
      command: 'buildAndPush'
-     Dockerfile: '**/Dockerfile'
+     Dockerfile: '$(System.DefaultWorkingDirectory)/Dockerfile'
