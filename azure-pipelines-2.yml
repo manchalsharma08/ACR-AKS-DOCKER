@@ -1,0 +1,9 @@
+trigger: none
+pool: default
+steps:
+ - task: Docker@2
+   inputs:
+     containerRegistry: 'adoacrdemo'
+     repository: 'myacr5696'
+     command: 'buildAndPush'
+     Dockerfile: '**/Dockerfile'
